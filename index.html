@@ -1,0 +1,1516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Which ADHD Pattern Is Affecting Your Daily Life Most?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Fraunces:wght@400;500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --primary: #3D7B6F;
+  --primary-dark: #2C5E54;
+  --primary-deeper: #1A3F38;
+  --primary-light: #EBF3F1;
+  --accent: #C4956A;
+  --accent-dark: #A67844;
+  --accent-light: #F5EDE4;
+  --bg: #FAF8F5;
+  --card: #FFFFFF;
+  --text: #2D2D2D;
+  --text-light: #6B6B6B;
+  --text-muted: #9A958E;
+  --border: #E5E0DA;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
+  --shadow: 0 4px 24px rgba(0,0,0,0.06);
+  --shadow-lg: 0 12px 48px rgba(0,0,0,0.1);
+  --radius: 16px;
+  --radius-sm: 10px;
+  --transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Jost', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  min-height: 100dvh;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ========== PROGRESS ========== */
+.progress-wrap {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: rgba(250,248,245,0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 16px 24px 12px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  opacity: 0;
+  transform: translateY(-100%);
+  transition: all 0.5s ease;
+}
+.progress-wrap.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.progress-track {
+  flex: 1;
+  height: 4px;
+  background: var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  border-radius: 4px;
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 0%;
+}
+.progress-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  min-width: 32px;
+  text-align: right;
+}
+
+/* ========== LAYOUT ========== */
+.quiz-viewport {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 60px 24px 40px;
+}
+
+.screen {
+  width: 100%;
+  max-width: 640px;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.screen.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ========== INTRO ========== */
+.intro-badge {
+  display: inline-block;
+  font-family: 'Fraunces', serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--primary);
+  background: var(--primary-light);
+  padding: 8px 20px;
+  border-radius: 50px;
+  margin-bottom: 32px;
+}
+
+h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 600;
+  line-height: 1.15;
+  margin-bottom: 28px;
+  color: var(--text);
+  letter-spacing: -0.5px;
+}
+
+h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.5rem, 4vw, 2.2rem);
+  font-weight: 600;
+  line-height: 1.2;
+  margin-bottom: 16px;
+}
+
+p { font-size: 1.05rem; color: var(--text-light); margin-bottom: 16px; line-height: 1.75; }
+
+.intro-list {
+  list-style: none;
+  margin: 24px 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.intro-list li {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+  color: var(--text);
+  background: var(--card);
+  padding: 10px 18px;
+  border-radius: 50px;
+  border: 1px solid var(--border);
+  font-weight: 400;
+}
+.intro-list li .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+}
+
+.discover-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 24px 0;
+}
+.discover-item {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 16px 20px;
+  font-size: 0.95rem;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.discover-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--primary-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 1.1rem;
+}
+
+.disclaimer-card {
+  background: var(--accent-light);
+  border-radius: var(--radius);
+  padding: 24px 28px;
+  margin: 28px 0;
+  position: relative;
+  overflow: hidden;
+}
+.disclaimer-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--accent);
+}
+.disclaimer-card p { color: var(--text); font-size: 0.95rem; margin-bottom: 6px; }
+.disclaimer-card p:last-child { margin-bottom: 0; }
+
+.welcome-card {
+  background: linear-gradient(135deg, var(--primary-light) 0%, #f0f7f5 100%);
+  border-radius: var(--radius);
+  padding: 24px 28px;
+  margin: 20px 0;
+}
+.welcome-card p { color: var(--primary-dark); font-size: 0.95rem; margin-bottom: 6px; }
+.welcome-card p:last-child { margin-bottom: 0; }
+
+/* ========== BUTTONS ========== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: 'Jost', sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 16px 44px;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(61,123,111,0.25);
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(61,123,111,0.35);
+}
+.btn-primary:active { transform: translateY(0); }
+
+.btn-accent {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(196,149,106,0.3);
+}
+.btn-accent:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(196,149,106,0.4);
+}
+
+.btn-ghost {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-family: 'Jost', sans-serif;
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 8px 16px;
+  transition: color 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.btn-ghost:hover { color: var(--text); }
+.btn-ghost svg { transition: transform 0.2s; }
+.btn-ghost:hover svg { transform: translateX(-3px); }
+
+/* ========== SECTION INTRO ========== */
+.section-intro {
+  text-align: center;
+  padding: 20px 0;
+}
+.section-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: #fff;
+  font-family: 'Fraunces', serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+.section-intro h2 {
+  margin-bottom: 12px;
+}
+.section-intro p {
+  max-width: 480px;
+  margin: 0 auto 32px;
+}
+
+/* ========== QUESTIONS ========== */
+.q-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.q-section-tag {
+  font-family: 'Fraunces', serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--primary);
+  background: var(--primary-light);
+  padding: 6px 14px;
+  border-radius: 50px;
+}
+.q-count {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.question-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.4rem, 3.5vw, 1.8rem);
+  font-weight: 500;
+  line-height: 1.4;
+  margin-bottom: 36px;
+  color: var(--text);
+}
+
+/* ========== OPTIONS ========== */
+.options { display: flex; flex-direction: column; gap: 10px; }
+
+.option {
+  display: flex;
+  align-items: center;
+  padding: 18px 24px;
+  background: var(--card);
+  border: 2px solid transparent;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 1.02rem;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+}
+.option:hover {
+  border-color: var(--primary);
+  box-shadow: var(--shadow);
+  transform: translateX(4px);
+}
+.option.selected {
+  border-color: var(--primary);
+  background: var(--primary-light);
+  box-shadow: 0 4px 16px rgba(61,123,111,0.12);
+}
+
+.option-key {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  border: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Jost', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-right: 16px;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+  background: var(--bg);
+}
+.option:hover .option-key { border-color: var(--primary); color: var(--primary); }
+.option.selected .option-key {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+}
+
+/* Multi-select */
+.option.multi.selected {
+  border-color: var(--accent);
+  background: var(--accent-light);
+  box-shadow: 0 4px 16px rgba(196,149,106,0.12);
+}
+.option.multi:hover { border-color: var(--accent); }
+.option.multi.selected .option-key {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+.multi-hint {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+  font-style: italic;
+}
+
+/* ========== REFLECTION ========== */
+.reflection-screen { text-align: center; padding: 20px 0; }
+
+.reflection-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 40px 36px;
+  box-shadow: var(--shadow);
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+}
+.reflection-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+}
+.reflection-card p {
+  color: var(--text);
+  font-size: 1.1rem;
+  line-height: 1.8;
+}
+.reflection-card ul {
+  list-style: none;
+  margin: 20px 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.reflection-card ul li {
+  background: var(--primary-light);
+  color: var(--primary-dark);
+  padding: 8px 18px;
+  border-radius: 50px;
+  font-size: 0.95rem;
+  font-weight: 400;
+}
+
+.reflection-quote {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.3rem;
+  font-style: italic;
+  color: var(--primary-dark);
+  text-align: center;
+  margin: 24px 0 8px;
+  line-height: 1.5;
+}
+
+/* ========== EMAIL CAPTURE ========== */
+.capture-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 40px 36px;
+  box-shadow: var(--shadow-lg);
+}
+.form-group { margin-bottom: 20px; }
+.form-group label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 8px;
+  letter-spacing: 0.3px;
+}
+.form-group input {
+  width: 100%;
+  padding: 16px 20px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: 'Jost', sans-serif;
+  font-size: 1rem;
+  color: var(--text);
+  background: var(--bg);
+  transition: all 0.25s ease;
+  outline: none;
+}
+.form-group input:focus {
+  border-color: var(--primary);
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(61,123,111,0.08);
+}
+.form-group input::placeholder { color: #C0BAB2; }
+.form-error { color: #C0392B; font-size: 0.82rem; margin-top: 6px; display: none; }
+
+.capture-benefits {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 24px 0;
+}
+.capture-benefit {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.95rem;
+  color: var(--text);
+}
+.benefit-check {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--primary-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.benefit-check svg { width: 12px; height: 12px; }
+
+/* ========== RESULTS ========== */
+.results-header {
+  text-align: center;
+  margin-bottom: 36px;
+}
+.results-header h1 { margin-bottom: 12px; }
+
+.results-podium {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+.podium-item {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 28px;
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+.podium-item:hover { transform: translateY(-2px); }
+
+.podium-item:nth-child(1) { border-left: 4px solid var(--primary); }
+.podium-item:nth-child(2) { border-left: 4px solid var(--accent); }
+.podium-item:nth-child(3) { border-left: 4px solid var(--text-muted); }
+
+.podium-rank {
+  font-family: 'Fraunces', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1;
+}
+.podium-item:nth-child(1) .podium-rank { color: var(--primary); }
+.podium-item:nth-child(2) .podium-rank { color: var(--accent); }
+.podium-item:nth-child(3) .podium-rank { color: var(--text-muted); }
+
+.podium-info { flex: 1; }
+.podium-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.podium-bar-track {
+  height: 6px;
+  background: var(--bg);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+.podium-bar-fill {
+  height: 100%;
+  border-radius: 6px;
+  width: 0;
+  transition: width 1.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.podium-item:nth-child(1) .podium-bar-fill { background: linear-gradient(90deg, var(--primary), var(--primary-dark)); }
+.podium-item:nth-child(2) .podium-bar-fill { background: linear-gradient(90deg, var(--accent), var(--accent-dark)); }
+.podium-item:nth-child(3) .podium-bar-fill { background: var(--text-muted); }
+.podium-pct { font-size: 0.82rem; color: var(--text-muted); }
+
+.detail-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 28px;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 14px;
+}
+.detail-card h4 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--primary-dark);
+}
+.detail-card p { font-size: 0.95rem; color: var(--text-light); margin-bottom: 0; }
+
+.means-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 32px;
+  box-shadow: var(--shadow);
+  margin: 32px 0;
+}
+.means-card h2 { margin-bottom: 12px; }
+.means-list { list-style: none; margin: 16px 0; }
+.means-list li {
+  padding: 8px 0 8px 28px;
+  position: relative;
+  color: var(--text-light);
+  font-size: 1rem;
+}
+.means-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 16px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.cta-section {
+  background: linear-gradient(135deg, var(--primary-deeper) 0%, var(--primary-dark) 50%, var(--primary) 100%);
+  border-radius: var(--radius);
+  padding: 44px 36px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  margin-top: 36px;
+}
+.cta-section::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.03);
+}
+.cta-section::after {
+  content: '';
+  position: absolute;
+  bottom: -30%;
+  left: -10%;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.03);
+}
+.cta-section h2 { color: #fff; }
+.cta-section p { color: rgba(255,255,255,0.8); }
+.cta-features {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin: 20px 0 28px;
+}
+.cta-features li {
+  background: rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.95);
+  padding: 8px 18px;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  backdrop-filter: blur(4px);
+}
+.cta-section .btn {
+  background: #fff;
+  color: var(--primary-dark);
+  font-weight: 600;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  position: relative;
+  z-index: 1;
+}
+.cta-section .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+}
+
+.final-message {
+  text-align: center;
+  padding: 36px 0 20px;
+}
+.final-message p {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.3rem;
+  font-style: italic;
+  color: var(--text);
+  line-height: 1.6;
+}
+
+/* ========== NAV ========== */
+.nav-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 36px;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 600px) {
+  .quiz-viewport { padding: 16px; }
+  .screen { max-width: 100%; }
+  .question-text { font-size: 1.3rem; }
+  .option { padding: 15px 18px; }
+  .reflection-card { padding: 28px 24px; }
+  .capture-card { padding: 28px 24px; }
+  .cta-section { padding: 32px 24px; }
+  .discover-grid { grid-template-columns: 1fr; }
+  .podium-item { padding: 20px; }
+  .detail-card { padding: 20px; }
+  .btn { padding: 14px 36px; font-size: 0.95rem; }
+  .intro-list { gap: 8px; }
+  .intro-list li { padding: 8px 14px; font-size: 0.9rem; }
+}
+
+/* ========== SPINNER ========== */
+.spinner {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 0.6s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ========== INTRO HERO ========== */
+.intro-hero {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  margin-bottom: 32px;
+}
+.intro-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--primary-light);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  flex-shrink: 0;
+}
+.intro-author {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+.intro-credentials {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.intro-cta-block {
+  text-align: center;
+  margin-top: 40px;
+  padding: 32px;
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+.intro-cta-block .btn {
+  font-size: 1.15rem;
+  padding: 20px 56px;
+  margin-bottom: 16px;
+}
+.intro-time-note {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+@media (max-width: 600px) {
+  .intro-hero { flex-direction: column; text-align: center; gap: 16px; }
+  .intro-avatar { width: 88px; height: 88px; }
+  .intro-cta-block { padding: 24px 20px; }
+  .intro-cta-block .btn { font-size: 1.05rem; padding: 18px 44px; }
+}
+
+/* ========== TRANSITIONS ========== */
+.fade-out {
+  opacity: 0 !important;
+  transform: translateY(-20px) !important;
+  transition: opacity 0.3s ease, transform 0.3s ease !important;
+}
+</style>
+</head>
+<body>
+
+<div class="progress-wrap" id="progressWrap">
+  <div class="progress-track">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+  <div class="progress-label" id="progressLabel">0%</div>
+</div>
+
+<div class="quiz-viewport">
+  <div class="screen" id="quizScreen"></div>
+</div>
+
+<script>
+// ============================================================
+// CONFIG
+// ============================================================
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwvCcEVTioW_Eb7fhgOeTy2VPpCThi8YZnTgt9bptpqgtYQKLSRLedc0To0LCsXc0Lj/exec';
+
+// ============================================================
+// DATA
+// ============================================================
+const LIKERT = [
+  { label: 'All of the time', value: 5 },
+  { label: 'A lot of the time', value: 4 },
+  { label: 'Sometimes', value: 3 },
+  { label: 'Rarely', value: 2 },
+  { label: 'Never', value: 1 }
+];
+
+const FLOW = [];
+let flowIndex = 0;
+let answers = {};
+const screen = document.getElementById('quizScreen');
+const progressWrap = document.getElementById('progressWrap');
+const progressFill = document.getElementById('progressFill');
+const progressLabel = document.getElementById('progressLabel');
+
+// Build flow steps
+function buildFlow() {
+  // Intro
+  FLOW.push({ type: 'intro' });
+
+  // Section 1: Your Experience
+  FLOW.push({
+    type: 'question', section: 'Your Experience', sectionNum: 1,
+    id: 'q1', text: 'Have you ever received an ADHD diagnosis?',
+    qType: 'choice', qIndex: 1, qTotal: 2,
+    options: [
+      { label: 'Yes, formally diagnosed', value: 'formally_diagnosed' },
+      { label: 'I strongly relate to ADHD', value: 'relate_to_adhd' },
+      { label: 'I suspect ADHD may apply', value: 'suspect' },
+      { label: 'I am exploring', value: 'exploring' }
+    ]
+  });
+  FLOW.push({
+    type: 'question', section: 'Your Experience', sectionNum: 1,
+    id: 'q2', text: 'When did you begin recognising these patterns?',
+    qType: 'choice', qIndex: 2, qTotal: 2,
+    options: [
+      { label: 'Recently', value: 'recently' },
+      { label: 'Within the last few years', value: 'few_years' },
+      { label: 'For a long time', value: 'long_time' },
+      { label: 'Diagnosed earlier', value: 'diagnosed_earlier' }
+    ]
+  });
+  FLOW.push({
+    type: 'reflection',
+    paragraphs: [
+      'Many adults recognise these patterns long before receiving a diagnosis \u2014 and many never pursue one.',
+      'What matters most is whether these experiences resonate with you.'
+    ]
+  });
+
+  // Section 2: Emotional Regulation
+  const erQs = [
+    'How often do your emotions escalate quickly before you have time to respond calmly?',
+    'How often do everyday responsibilities feel emotionally overwhelming?',
+    'How often do small frustrations trigger stronger emotional reactions than you would like?',
+    'How often do you find it difficult to calm down once you become upset or stressed?'
+  ];
+  erQs.forEach((text, i) => {
+    FLOW.push({
+      type: 'question', section: 'Emotional Regulation', sectionNum: 2,
+      id: `q${i + 3}`, text, qType: 'likert', qIndex: i + 1, qTotal: erQs.length
+    });
+  });
+  FLOW.push({
+    type: 'reflection',
+    paragraphs: ['Many adults describe emotions as:'],
+    tags: ['intense', 'fast moving', 'difficult to regulate once activated'],
+    quote: 'This reflects how the nervous system responds under pressure \u2014 not a lack of effort.'
+  });
+
+  // Section 3: RSD
+  const rsdQs = [
+    'How often do criticism or perceived rejection stay on your mind for a long time?',
+    'How often do you replay conversations in your mind, worrying about what you said or how you came across?',
+    'How often do you feel deeply affected by tone, facial expression, or perceived disapproval?',
+    'How often do you avoid situations or conversations because of fear of criticism or rejection?',
+    'How often do you experience strong emotional reactions to feedback, even when it is minor?',
+    'How often do you say yes to things you do not want to do, to avoid disappointing others?',
+    'How often do you prioritise other people\u2019s needs over your own, even when it leaves you feeling drained?',
+    'How often do you apologise excessively or feel responsible for things that may not be your fault?',
+    'How often do you second-guess yourself after interactions?',
+    'How often do you adjust your behaviour, opinions, or personality to avoid criticism or to be accepted?',
+    'How often do you feel intense emotions such as shame, sadness, or anger when criticised?',
+    'How often do you withdraw, shut down, or distance yourself after perceived rejection?'
+  ];
+  rsdQs.forEach((text, i) => {
+    FLOW.push({
+      type: 'question', section: 'Rejection Sensitive Dysphoria', sectionNum: 3,
+      id: `q${i + 7}`, text, qType: 'likert', qIndex: i + 1, qTotal: rsdQs.length
+    });
+  });
+  FLOW.push({
+    type: 'reflection',
+    paragraphs: ['If this resonates, you are not \u201Ctoo sensitive.\u201D', 'Many adults with ADHD experience Rejection Sensitive Dysphoria. This can show up as:'],
+    tags: ['overthinking interactions', 'people-pleasing', 'avoidance', 'over-apologising', 'masking', 'strong emotional reactions', 'withdrawal after criticism'],
+    quote: 'You do not need a diagnosis for this to be valid. If this feels familiar, it is worth supporting.'
+  });
+
+  // Section 4: Executive Function
+  const efQs = [
+    'How often do you know what you need to do but feel unable to get started?',
+    'How often do you start several tasks but struggle to finish them?',
+    'How often do you get pulled into distractions such as scrolling or low-priority tasks?',
+    'How often do you feel mentally overwhelmed when trying to organise or prioritise?',
+    'How often do you delay tasks even when you intend to start?'
+  ];
+  efQs.forEach((text, i) => {
+    FLOW.push({
+      type: 'question', section: 'Executive Function', sectionNum: 4,
+      id: `q${i + 19}`, text, qType: 'likert', qIndex: i + 1, qTotal: efQs.length
+    });
+  });
+  FLOW.push({
+    type: 'reflection',
+    paragraphs: ['These patterns are commonly linked to executive functioning:'],
+    tags: ['starting tasks', 'organising', 'prioritising', 'following through']
+  });
+
+  // Section 5: Time Management
+  const tmQs = [
+    'How often do you underestimate how long things will take, even when you plan ahead?',
+    'How often do you lose track of time without realising?',
+    'How often do you become absorbed in tasks and not notice time passing?',
+    'How often do you rush, run late, or feel like you are constantly catching up?'
+  ];
+  tmQs.forEach((text, i) => {
+    FLOW.push({
+      type: 'question', section: 'Time Management', sectionNum: 5,
+      id: `q${i + 24}`, text, qType: 'likert', qIndex: i + 1, qTotal: tmQs.length
+    });
+  });
+  FLOW.push({
+    type: 'reflection',
+    paragraphs: ['Many adults describe time as:'],
+    tags: ['difficult to track', 'easy to lose', 'inconsistent to manage']
+  });
+
+  // Section 6: Goal Setting
+  const gsQs = [
+    'How often do you start with strong motivation but struggle to sustain it?',
+    'How often do you approach goals in all-or-nothing bursts?',
+    'How often do you make plans but struggle to follow through consistently?',
+    'How often do you feel unsure what to prioritise, which leads to inaction?'
+  ];
+  gsQs.forEach((text, i) => {
+    FLOW.push({
+      type: 'question', section: 'Goal Setting', sectionNum: 6,
+      id: `q${i + 28}`, text, qType: 'likert', qIndex: i + 1, qTotal: gsQs.length
+    });
+  });
+  FLOW.push({
+    type: 'reflection',
+    paragraphs: ['This reflects how the brain regulates motivation, direction, and reward.']
+  });
+
+  // Section 7: Daily Impact
+  FLOW.push({
+    type: 'question', section: 'Daily Impact', sectionNum: 7,
+    id: 'q32', text: 'How often do you feel discouraged at the end of the day when tasks remain unfinished?',
+    qType: 'likert', qIndex: 1, qTotal: 2
+  });
+  FLOW.push({
+    type: 'question', section: 'Daily Impact', sectionNum: 7,
+    id: 'q33', text: 'How often do you feel like you are constantly trying to catch up?',
+    qType: 'likert', qIndex: 2, qTotal: 2
+  });
+
+  // Section 8: Strengths
+  FLOW.push({
+    type: 'question', section: 'Strengths', sectionNum: 8,
+    id: 'strengths', text: 'Which strengths do you recognise in yourself?',
+    qType: 'multi', qIndex: 1, qTotal: 1,
+    options: [
+      { label: 'Creativity', value: 'creativity' },
+      { label: 'Empathy', value: 'empathy' },
+      { label: 'Curiosity', value: 'curiosity' },
+      { label: 'Resilience', value: 'resilience' },
+      { label: 'Adaptability', value: 'adaptability' },
+      { label: 'Problem solving', value: 'problem_solving' },
+      { label: 'Passion', value: 'passion' },
+      { label: 'Sense of humour', value: 'sense_of_humour' }
+    ]
+  });
+
+  // Section 9: Readiness
+  FLOW.push({
+    type: 'question', section: 'Readiness', sectionNum: 9,
+    id: 'q34', text: 'How ready do you feel to start working on these areas?',
+    qType: 'choice', qIndex: 1, qTotal: 3,
+    options: [
+      { label: 'I am ready to start now', value: 'ready_now' },
+      { label: 'I am open but unsure', value: 'open_unsure' },
+      { label: 'Not ready yet', value: 'not_ready' }
+    ]
+  });
+  FLOW.push({
+    type: 'question', section: 'Readiness', sectionNum: 9,
+    id: 'q35', text: 'How much time could you realistically commit each week?',
+    qType: 'choice', qIndex: 2, qTotal: 3,
+    options: [
+      { label: '2 or more hours', value: '2_plus_hours' },
+      { label: '1 to 2 hours', value: '1_to_2_hours' },
+      { label: 'Less than 1 hour', value: 'less_than_1_hour' }
+    ]
+  });
+  FLOW.push({
+    type: 'question', section: 'Readiness', sectionNum: 9,
+    id: 'q36', text: 'What would you most like to change right now?',
+    qType: 'choice', qIndex: 3, qTotal: 3,
+    options: [
+      { label: 'My emotions', value: 'emotions' },
+      { label: 'My focus and follow through', value: 'focus' },
+      { label: 'My time management', value: 'time' },
+      { label: 'My ability to achieve goals', value: 'goals' },
+      { label: 'My sensitivity to criticism', value: 'sensitivity' }
+    ]
+  });
+
+  // Email capture
+  FLOW.push({ type: 'email_capture' });
+
+  // Results
+  FLOW.push({ type: 'results' });
+}
+
+// ============================================================
+// PROGRESS
+// ============================================================
+function updateProgress() {
+  const total = FLOW.length - 1; // exclude results
+  const pct = Math.min(Math.round((flowIndex / total) * 100), 100);
+  progressFill.style.width = pct + '%';
+  progressLabel.textContent = pct + '%';
+
+  if (flowIndex > 0) {
+    progressWrap.classList.add('visible');
+  } else {
+    progressWrap.classList.remove('visible');
+  }
+}
+
+// ============================================================
+// RENDER
+// ============================================================
+function render() {
+  const step = FLOW[flowIndex];
+  updateProgress();
+
+  // Transition
+  screen.classList.remove('active');
+  screen.classList.add('fade-out');
+
+  setTimeout(() => {
+    screen.classList.remove('fade-out');
+
+    if (step.type === 'intro') renderIntro();
+    else if (step.type === 'question') renderQuestion(step);
+    else if (step.type === 'reflection') renderReflection(step);
+    else if (step.type === 'email_capture') renderEmailCapture();
+    else if (step.type === 'results') renderResults();
+
+    requestAnimationFrame(() => {
+      screen.classList.add('active');
+    });
+  }, flowIndex === 0 ? 0 : 300);
+}
+
+function renderIntro() {
+  screen.innerHTML = `
+    <div class="intro-badge">Adult ADHD Foundations Program</div>
+
+    <div class="intro-hero">
+      <img src="elaine.png" alt="Elaine Collins, Psychologist" class="intro-avatar">
+      <div>
+        <div class="intro-author">Elaine Collins</div>
+        <div class="intro-credentials">Psychologist &amp; Creator of the Adult ADHD Foundations Program</div>
+      </div>
+    </div>
+
+    <h1>Which ADHD Pattern Is Affecting Your Daily Life Most?</h1>
+
+    <p>Take this short reflection quiz and in just a few minutes you will receive a <strong>personalised breakdown</strong> of the ADHD patterns placing the most pressure on your daily life \u2014 along with practical next steps to begin supporting them.</p>
+
+    <div class="intro-cta-block">
+      <button class="btn btn-primary" onclick="goNext()">Start the Quiz</button>
+      <p class="intro-time-note">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="#9A958E" stroke-width="1.5"/><path d="M8 5v3.5l2.5 1.5" stroke="#9A958E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Takes approximately 5 minutes to complete
+      </p>
+    </div>
+
+    <div class="discover-grid">
+      <div class="discover-item"><div class="discover-icon">\u{1F50D}</div><span>Your top ADHD patterns ranked</span></div>
+      <div class="discover-item"><div class="discover-icon">\u{1F4CA}</div><span>A personalised results breakdown</span></div>
+      <div class="discover-item"><div class="discover-icon">\u{1F6E0}</div><span>Practical strategies for your patterns</span></div>
+      <div class="discover-item"><div class="discover-icon">\u{1F3AF}</div><span>Clear next steps to get started</span></div>
+    </div>
+
+    <div class="welcome-card">
+      <p>You are welcome here whether you have a formal diagnosis, strongly relate to ADHD traits, or are exploring whether ADHD may apply.</p>
+      <p><strong>If you relate to these patterns, you are in the right place.</strong></p>
+    </div>
+
+    <div class="disclaimer-card">
+      <p><strong>Important</strong></p>
+      <p>This is not a diagnostic tool. It does not replace assessment with a GP, psychiatrist, or psychologist. It is designed for reflection and guidance only.</p>
+    </div>
+  `;
+}
+
+function renderQuestion(step) {
+  const keys = 'ABCDEFGHIJKLMNOP';
+  let optionsHTML = '';
+
+  const opts = step.qType === 'likert' ? LIKERT : step.options;
+
+  if (step.qType === 'multi') {
+    const selected = answers[step.id] || [];
+    optionsHTML += `<p class="multi-hint">Select all that apply</p>`;
+    opts.forEach((opt, i) => {
+      const sel = selected.includes(opt.value) ? 'selected' : '';
+      optionsHTML += `
+        <div class="option multi ${sel}" onclick="toggleMulti('${step.id}', '${opt.value}')">
+          <span class="option-key">${keys[i]}</span>
+          <span>${opt.label}</span>
+        </div>`;
+    });
+    optionsHTML += `
+      <div style="text-align:center; margin-top:28px;">
+        <button class="btn btn-primary" onclick="goNext()">Continue</button>
+      </div>`;
+  } else {
+    opts.forEach((opt, i) => {
+      const val = typeof opt.value === 'number' ? opt.value : `'${opt.value}'`;
+      const sel = answers[step.id] === opt.value ? 'selected' : '';
+      optionsHTML += `
+        <div class="option ${sel}" onclick="selectAnswer('${step.id}', ${val})">
+          <span class="option-key">${keys[i]}</span>
+          <span>${opt.label}</span>
+        </div>`;
+    });
+  }
+
+  screen.innerHTML = `
+    <div class="q-meta">
+      <span class="q-section-tag">${step.section}</span>
+      <span class="q-count">${step.qIndex} of ${step.qTotal}</span>
+    </div>
+    <div class="question-text">${step.text}</div>
+    <div class="options">${optionsHTML}</div>
+    <div class="nav-row">
+      <button class="btn-ghost" onclick="goBack()">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8l4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Back
+      </button>
+      <div></div>
+    </div>
+  `;
+}
+
+function renderReflection(step) {
+  let inner = '';
+  if (step.paragraphs) {
+    step.paragraphs.forEach(p => { inner += `<p>${p}</p>`; });
+  }
+  if (step.tags) {
+    inner += '<ul>';
+    step.tags.forEach(t => { inner += `<li>${t}</li>`; });
+    inner += '</ul>';
+  }
+
+  let quoteHTML = '';
+  if (step.quote) {
+    quoteHTML = `<p class="reflection-quote">${step.quote}</p>`;
+  }
+
+  screen.innerHTML = `
+    <div class="reflection-screen">
+      <div class="reflection-card">
+        ${inner}
+      </div>
+      ${quoteHTML}
+      <div style="text-align:center; margin-top:32px;">
+        <button class="btn btn-primary" onclick="goNext()">Continue</button>
+      </div>
+      <div class="nav-row">
+        <button class="btn-ghost" onclick="goBack()">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8l4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Back
+        </button>
+        <div></div>
+      </div>
+    </div>
+  `;
+}
+
+function renderEmailCapture() {
+  const checkSVG = `<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#3D7B6F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
+  screen.innerHTML = `
+    <div style="text-align:center; margin-bottom:32px;">
+      <div class="intro-badge">Almost There</div>
+      <h2>Where should we send your personalised results?</h2>
+    </div>
+
+    <div class="capture-card">
+      <div class="capture-benefits">
+        <div class="capture-benefit"><div class="benefit-check">${checkSVG}</div>Your ADHD pattern breakdown</div>
+        <div class="capture-benefit"><div class="benefit-check">${checkSVG}</div>Practical strategies for your top patterns</div>
+        <div class="capture-benefit"><div class="benefit-check">${checkSVG}</div>Your recommended next steps</div>
+      </div>
+
+      <form id="leadForm" onsubmit="submitLead(event)">
+        <div class="form-group">
+          <label for="firstName">First name</label>
+          <input type="text" id="firstName" placeholder="Your first name" required>
+          <div class="form-error" id="nameError">Please enter your first name</div>
+        </div>
+        <div class="form-group">
+          <label for="email">Email address</label>
+          <input type="email" id="email" placeholder="you@example.com" required>
+          <div class="form-error" id="emailError">Please enter a valid email address</div>
+        </div>
+        <div class="form-group">
+          <label for="phone">Phone number <span style="color:var(--text-muted); font-weight:400;">(optional)</span></label>
+          <input type="tel" id="phone" placeholder="+353 1234 5678">
+        </div>
+        <div style="text-align:center; margin-top:28px;">
+          <button type="submit" class="btn btn-primary" id="submitBtn">Show My Results</button>
+        </div>
+      </form>
+
+      <p style="text-align:center; font-size:0.82rem; color:var(--text-muted); margin-top:16px; margin-bottom:0;">All programmes are suited to adults with or without a formal diagnosis.</p>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn-ghost" onclick="goBack()">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8l4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Back
+      </button>
+      <div></div>
+    </div>
+  `;
+}
+
+function renderResults() {
+  progressWrap.classList.remove('visible');
+
+  const scores = calculateScores();
+  const ranked = Object.entries(scores)
+    .filter(([k]) => k !== 'daily_impact')
+    .sort((a, b) => b[1] - a[1]);
+  const top3 = ranked.slice(0, 3);
+
+  let podiumHTML = '';
+  top3.forEach(([key, pct], i) => {
+    podiumHTML += `
+      <div class="podium-item">
+        <div class="podium-rank">${i + 1}</div>
+        <div class="podium-info">
+          <div class="podium-name">${PATTERNS[key].name}</div>
+          <div class="podium-bar-track">
+            <div class="podium-bar-fill" data-width="${pct}"></div>
+          </div>
+          <div class="podium-pct">${Math.round(pct)}% match</div>
+        </div>
+      </div>`;
+  });
+
+  let detailsHTML = '';
+  top3.forEach(([key]) => {
+    const d = PATTERNS[key];
+    detailsHTML += `
+      <div class="detail-card">
+        <h4>${d.name}</h4>
+        <p>${d.description}</p>
+      </div>`;
+  });
+
+  screen.innerHTML = `
+    <div class="results-header">
+      <div class="intro-badge">Your Results</div>
+      <h1>Your ADHD Patterns</h1>
+      <p>Based on your responses, the patterns affecting your daily life most appear to be:</p>
+    </div>
+
+    <div class="results-podium">${podiumHTML}</div>
+
+    ${detailsHTML}
+
+    <div class="means-card">
+      <h2>What This Means</h2>
+      <p>Most adults recognise themselves in more than one area. These patterns often interact \u2014 for example:</p>
+      <ul class="means-list">
+        <li>emotional reactions affecting focus</li>
+        <li>task paralysis increasing overwhelm</li>
+        <li>time blindness impacting follow through</li>
+        <li>sensitivity to criticism affecting confidence</li>
+      </ul>
+      <p>This is a common experience.</p>
+    </div>
+
+    <div class="cta-section">
+      <h2>The Adult ADHD Foundations Program</h2>
+      <p>If you recognised yourself in more than one area, this is the strongest place to begin. This structured, psychologist-developed programme helps you build practical skills across:</p>
+      <ul class="cta-features">
+        <li>Emotional Regulation</li>
+        <li>Executive Function</li>
+        <li>Goal Setting</li>
+        <li>Time Management</li>
+        <li>Rejection Sensitive Dysphoria</li>
+      </ul>
+      <p>Designed for adults with or without a formal diagnosis.</p>
+      <a href="https://www.collinspsychology.com/cbt-for-adult-adhd" target="_blank" class="btn">Explore the Programme</a>
+    </div>
+
+    <div class="final-message">
+      <p>You do not need to have everything figured out to begin.<br>What matters is recognising what feels difficult and beginning to support it.</p>
+    </div>
+  `;
+
+  // Animate bars
+  setTimeout(() => {
+    document.querySelectorAll('.podium-bar-fill').forEach(bar => {
+      bar.style.width = bar.dataset.width + '%';
+    });
+  }, 400);
+}
+
+// ============================================================
+// PATTERNS
+// ============================================================
+const PATTERNS = {
+  emotional_regulation: {
+    name: 'Emotional Regulation',
+    description: 'You may experience fast, intense emotional reactions and difficulty calming once activated. This can lead to overwhelm and exhaustion.'
+  },
+  rsd: {
+    name: 'Rejection Sensitive Dysphoria',
+    description: 'You may find yourself overthinking interactions, feeling deeply affected by criticism, and adjusting your behaviour to avoid rejection. This can lead to people-pleasing, avoidance, and emotional overwhelm.'
+  },
+  executive_function: {
+    name: 'Executive Function',
+    description: 'You may feel stuck when trying to start tasks, start multiple things without finishing, and become pulled into distractions. This often leads to frustration and inconsistency.'
+  },
+  time_management: {
+    name: 'Time Management',
+    description: 'You may experience time blindness, lose track of time, and feel like you are constantly catching up. This can create daily pressure and stress.'
+  },
+  goal_setting: {
+    name: 'Goal Setting',
+    description: 'You may start with motivation but struggle to sustain it, fall into all-or-nothing patterns, and lose direction over time. This can lead to inconsistency and frustration.'
+  }
+};
+
+// ============================================================
+// SCORING
+// ============================================================
+function calculateScores() {
+  const cats = {
+    emotional_regulation: { qs: ['q3','q4','q5','q6'], max: 20 },
+    rsd: { qs: ['q7','q8','q9','q10','q11','q12','q13','q14','q15','q16','q17','q18'], max: 60 },
+    executive_function: { qs: ['q19','q20','q21','q22','q23'], max: 25 },
+    time_management: { qs: ['q24','q25','q26','q27'], max: 20 },
+    goal_setting: { qs: ['q28','q29','q30','q31'], max: 20 },
+    daily_impact: { qs: ['q32','q33'], max: 10 }
+  };
+  const scores = {};
+  for (const [cat, info] of Object.entries(cats)) {
+    let sum = 0;
+    info.qs.forEach(q => { sum += (answers[q] || 0); });
+    scores[cat] = (sum / info.max) * 100;
+  }
+  return scores;
+}
+
+// ============================================================
+// ACTIONS
+// ============================================================
+function selectAnswer(id, value) {
+  answers[id] = value;
+  // Brief visual feedback then advance
+  const opts = document.querySelectorAll('.option');
+  opts.forEach(o => o.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+  setTimeout(() => goNext(), 350);
+}
+
+function toggleMulti(id, value) {
+  if (!answers[id]) answers[id] = [];
+  const idx = answers[id].indexOf(value);
+  if (idx > -1) answers[id].splice(idx, 1);
+  else answers[id].push(value);
+  render();
+}
+
+function goNext() {
+  if (flowIndex < FLOW.length - 1) {
+    flowIndex++;
+    render();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+
+function goBack() {
+  if (flowIndex > 0) {
+    flowIndex--;
+    render();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+
+function submitLead(e) {
+  e.preventDefault();
+  const firstName = document.getElementById('firstName').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+
+  let valid = true;
+  if (!firstName) { document.getElementById('nameError').style.display = 'block'; valid = false; }
+  else { document.getElementById('nameError').style.display = 'none'; }
+  if (!email || !email.includes('@')) { document.getElementById('emailError').style.display = 'block'; valid = false; }
+  else { document.getElementById('emailError').style.display = 'none'; }
+  if (!valid) return;
+
+  answers.first_name = firstName;
+  answers.email = email;
+  answers.phone = phone;
+
+  const btn = document.getElementById('submitBtn');
+  btn.innerHTML = '<span class="spinner"></span> Loading results...';
+  btn.disabled = true;
+
+  const scores = calculateScores();
+  const ranked = Object.entries(scores).filter(([k]) => k !== 'daily_impact').sort((a, b) => b[1] - a[1]);
+
+  const payload = {
+    first_name: firstName, email, phone,
+    top_pattern_1: PATTERNS[ranked[0][0]].name,
+    top_pattern_2: PATTERNS[ranked[1][0]].name,
+    top_pattern_3: PATTERNS[ranked[2][0]].name,
+    emotional_regulation_pct: Math.round(scores.emotional_regulation),
+    rsd_pct: Math.round(scores.rsd),
+    executive_function_pct: Math.round(scores.executive_function),
+    time_management_pct: Math.round(scores.time_management),
+    goal_setting_pct: Math.round(scores.goal_setting),
+    diagnosis_status: answers.q1 || '',
+    readiness: answers.q34 || '',
+    weekly_time: answers.q35 || '',
+    priority_change: answers.q36 || '',
+    strengths: (answers.strengths || []).join(', ')
+  };
+
+  if (GOOGLE_SCRIPT_URL) {
+    fetch(GOOGLE_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload)
+    }).catch(() => {});
+  }
+
+  setTimeout(() => goNext(), 800);
+}
+
+// ============================================================
+// INIT
+// ============================================================
+buildFlow();
+render();
+// Show intro immediately
+screen.classList.add('active');
+</script>
+</body>
+</html>
